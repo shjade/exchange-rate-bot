@@ -36,6 +36,7 @@
 
   <script>
     async function load() {
+      // ✅ Pages 루트(/docs) 기준으로 docs/data/exchange_rates.json을 읽음
       const url = "./data/exchange_rates.json?ts=" + Date.now(); // 캐시 방지
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch JSON: " + res.status);

@@ -29,29 +29,62 @@ jobs:
           ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
         run: |
           python <<'PY'
-          import requests, json, datetime, os
+          import os, json, datetime, sys
+          from pathlib import Path
+          import requests
+
+          api_key = os.environ.get("ALPHAVANTAGE_API_KEY", "").strip()
+          if not api_key:
+              print("ERROR: ALPHAVANTAGE_API_KEY secret is not set.")
+              sys.exit(1)
+
           url = "https://www.alphavantage.co/query"
           params = {
               "function": "CURRENCY_EXCHANGE_RATE",
               "from_currency": "USD",
               "to_currency": "KRW",
-              "apikey": os.environ["ALPHAVANTAGE_API_KEY"]
+              "apikey": api_key
           }
 
-          r = requests.get(url, params=params, timeout=10)
-          data = r.json()["Realtime Currency Exchange Rate"]
+          r = requests.get(url, params=params, timeout=15)
+          try:
+              j = r.json()
+          except Exception:
+              print("ERROR: Non-JSON response:", r.status_code)
+              print(r.text[:500])
+              sys.exit(1)
 
+          # 정상 키가 없으면(레이트리밋/키오류 등) 기존 값 유지하고 워크플로우는 실패시키지 않음
+          key = "Realtime Currency Exchange Rate"
+          out_path = Path("docs/data/exchange_rates.json")
+          out_path.parent.mkdir(parents=True, exist_ok=True)
+
+          if key not in j:
+              print("WARN: Unexpected AlphaVantage response (keeping previous data).")
+              print(json.dumps(j, indent=2)[:1200])
+
+              if out_path.exists():
+                  # 기존 파일 유지 (그대로 두면 add/commit에서 변경 없음)
+                  sys.exit(0)
+              else:
+                  print("ERROR: No previous exchange_rates.json exists to fall back to.")
+                  sys.exit(1)
+
+          data = j[key]
           result = {
               "pair": "USD_KRW",
               "rate": float(data["5. Exchange Rate"]),
               "api_as_of": data["6. Last Refreshed"],
-              "fetched_at_utc": datetime.datetime.utcnow().isoformat()
+              "fetched_at_utc": datetime.datetime.utcnow().isoformat() + "Z",
+              "source": "AlphaVantage"
           }
 
-          os.makedirs("docs/data", exist_ok=True)
-          with open("docs/data/exchange_rates.json", "w") as f:
-              json.dump(result, f, indent=2)
+          out_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
+          print("OK:", result)
           PY
+
+
+      
 
       - name: Update README
         run: |

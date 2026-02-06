@@ -1,5 +1,9 @@
 name: Update Exchange Rates
 
+concurrency:
+  group: exchange-rate-update
+  cancel-in-progress: true
+  
 on:
   schedule:
     - cron: "*/5 * * * *"
@@ -40,10 +44,14 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add data/exchange_rates.json docs/data/exchange_rates.json
           if git diff --cached --quiet; then
             echo "No changes to commit."
-          else
-            git commit -m "chore: update exchange rates"
-            git push
+            exit 0
           fi
+
+          git commit -m "chore: update exchange rates"
+
+          git pull --rebase origin main
+          git push origin main

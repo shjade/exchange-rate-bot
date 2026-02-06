@@ -1,0 +1,8 @@
+{
+  "provider": "init",
+  "from": "USD",
+  "to": "KRW",
+  "rate": 0,
+  "as_of": null,
+  "fetched_at_utc": null
+}

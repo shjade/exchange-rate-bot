@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Exchange Rate Dashboard</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px; max-width: 720px; margin: 0 auto; }
+    .card { border: 1px solid #e5e7eb; border-radius: 14px; padding: 18px; }
+    h1 { margin: 0 0 12px; font-size: 22px; }
+    .big { font-size: 34px; font-weight: 700; margin: 10px 0; }
+    .muted { color: #6b7280; font-size: 14px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .pill { background: #f3f4f6; border-radius: 999px; padding: 6px 10px; font-size: 13px; }
+    button { padding: 10px 12px; border-radius: 10px; border: 1px solid #e5e7eb; background: white; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>💱 환율 대시보드</h1>
+
+  <div class="card">
+    <div class="row">
+      <div class="pill" id="pair">-</div>
+      <div class="pill" id="provider">-</div>
+    </div>
+
+    <div class="big" id="rate">불러오는 중...</div>
+
+    <div class="muted" id="time">-</div>
+
+    <div style="margin-top: 14px" class="row">
+      <button onclick="load()">새로고침</button>
+      <a class="muted" href="../data/exchange_rates.json" target="_blank">원본 JSON 보기</a>
+    </div>
+  </div>
+
+  <script>
+    async function load() {
+      const url = "../data/exchange_rates.json?ts=" + Date.now(); // 캐시 방지
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Failed to fetch JSON: " + res.status);
+      const data = await res.json();
+
+      document.getElementById("pair").textContent = `${data.from} → ${data.to}`;
+      document.getElementById("provider").textContent = data.provider || "-";
+      document.getElementById("rate").textContent = Number(data.rate).toLocaleString("ko-KR");
+      document.getElementById("time").textContent =
+        `API as_of: ${data.as_of || "-"} | fetched_at_utc: ${data.fetched_at_utc || "-"}`;
+    }
+
+    load().catch(err => {
+      document.getElementById("rate").textContent = "로드 실패";
+      document.getElementById("time").textContent = String(err);
+    });
+  </script>
+</body>
+</html>

@@ -4,6 +4,18 @@
 - GitHub Actions + cron
 - 결과는 JSON으로 ## 💱 Exchange Rate Dashboard
 
+## 💱 Live Exchange Rate (Auto Updated)
+
+<!-- RATE:START -->
+**USD → KRW:** updating...
+<!-- RATE:END -->
+
+<img src="https://shjade.github.io/exchange-rate-bot/badge.svg" alt="USD to KRW badge" />
+
+- 🌐 Dashboard: https://shjade.github.io/exchange-rate-bot/
+- 📄 Raw JSON: https://shjade.github.io/exchange-rate-bot/data/exchange_rates.json
+
+
 - 🌐 **Dashboard:** https://shjade.github.io/exchange-rate-bot/
 - 📄 **Raw JSON:** https://shjade.github.io/exchange-rate-bot/data/exchange_rates.json
 

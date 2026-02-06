@@ -1,24 +1,21 @@
-# exchange rate api
+# 💱 Exchange Rate API
 
-- USD -> KRW 환율 자동 업데이트
+- USD → KRW 환율 자동 업데이트
 - GitHub Actions + cron
-- 결과는 JSON으로 ## 💱 Exchange Rate Dashboard
+- 결과는 JSON + Dashboard + README 실시간 표시
 
-## 💱 Live Exchange Rate (Auto Updated)
+---
+
+## 🔴 Live Exchange Rate (Auto Updated)
 
 <!-- RATE:START -->
-**USD → KRW:** updating...
+USD → KRW: updating...
 <!-- RATE:END -->
 
 <img src="https://shjade.github.io/exchange-rate-bot/badge.svg" alt="USD to KRW badge" />
 
-- 🌐 Dashboard: https://shjade.github.io/exchange-rate-bot/
-- 📄 Raw JSON: https://shjade.github.io/exchange-rate-bot/data/exchange_rates.json
+- 🌐 Dashboard  
+  https://shjade.github.io/exchange-rate-bot/
 
-
-- 🌐 **Dashboard:** https://shjade.github.io/exchange-rate-bot/
-- 📄 **Raw JSON:** https://shjade.github.io/exchange-rate-bot/data/exchange_rates.json
-
-[![Open Dashboard](https://img.shields.io/badge/Open-Dashboard-2ea44f?style=for-the-badge)](https://shjade.github.io/exchange-rate-bot/)
-[![View JSON](https://img.shields.io/badge/View-Raw%20JSON-5865F2?style=for-the-badge)](https://shjade.github.io/exchange-rate-bot/data/exchange_rates.json)
-
+- 📄 Raw JSON  
+  https://shjade.github.io/exchange-rate-bot/data/exchange_rates.json
